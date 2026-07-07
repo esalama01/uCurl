@@ -3,9 +3,11 @@ package main
 import(
 	"uCurl/src"
 	"os"
+	"fmt"
 )
 
 func main(){
 	args := os.Args
-	src.Print_protocole(args[1])
+	server := src.Parse(args[1])
+	fmt.Println(server.Connect())
 }

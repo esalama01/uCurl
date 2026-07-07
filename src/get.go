@@ -1,8 +1,10 @@
 package src
 
 import(
+	"fmt"
 	"strings"
 	"net"
+	"log"
 )
 
 type URL_PARSER struct{ //as in https://www.youtube.com/watch?v=WmMa1GVPWZ0
@@ -12,7 +14,7 @@ type URL_PARSER struct{ //as in https://www.youtube.com/watch?v=WmMa1GVPWZ0
 	Path string
 }
 
-func Parse(url string) (URL_PARSER){//suppose it's of the format [http://eu.httpbin.org/get/mhido]
+func Parse(url string) (URL_PARSER){//suppose it's of the format [http://eu.httpbin.org/get]
 	host, path, _ := strings.Cut(url[7:], "/") //what's between // and /
 	_,port,found :=  strings.Cut(host, ":")
 
@@ -28,18 +30,20 @@ func Parse(url string) (URL_PARSER){//suppose it's of the format [http://eu.http
 	}
 	return parser
 }
-
-func (server URL_PARSER) Connect() (string){ //d'apres https://dzone.com/articles/socket-programming-in-go
+func (server URL_PARSER) Connect() string{ //d'apres https://dzone.com/articles/socket-programming-in-go
 	//establish connection
 	connection, err := net.Dial("tcp", server.Host + ":" + server.Port) //i defaulted it to tcp bec i m not running twitch lol
 	if err != nil {
-        panic(err)
+		fmt.Println("Dialing err")
+        log.Println(err)
     }
+	fmt.Printf("making connection to %s:%s",server.Host, server.Port)
 	//read the data
-	buffer := make([]byte, 1024)
+	buffer := make([]byte, 1<<19)
 	l, err := connection.Read(buffer)
 	if err != nil {
-        panic(err)
+		log.Println("Reading error:", err)
+    	return ""
     }
 	response := string(buffer[:l])
 	defer connection.Close()
