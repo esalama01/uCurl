@@ -38,6 +38,12 @@ func (server URL_PARSER) Connect() string{ //d'apres https://dzone.com/articles/
         log.Println(err)
     }
 	fmt.Printf("making connection to %s:%s",server.Host, server.Port)
+	request := fmt.Sprintf("GET %s HTTP/1.1\r\nHost: %s\r\nConnection: close\r\n\r\n", server.Path, server.Host)
+	_,err = connection.Write([]byte(request))
+	if err != nil {
+        log.Println("Writing error:", err)
+        return ""
+    }
 	//read the data
 	buffer := make([]byte, 1<<19)
 	l, err := connection.Read(buffer)
