@@ -37,8 +37,8 @@ func (server URL_PARSER) Connect() string{ //d'apres https://dzone.com/articles/
 		fmt.Println("Dialing err")
         log.Println(err)
     }
-	fmt.Printf("making connection to %s:%s",server.Host, server.Port)
-	request := fmt.Sprintf("GET %s HTTP/1.1\r\nHost: %s\r\nConnection: close\r\n\r\n", server.Path, server.Host)
+	fmt.Printf("making connection to %s:%s\n",server.Host, server.Port)
+	request := fmt.Sprintf("GET /%s HTTP/1.1\r\nHost: %s\r\nConnection: close\r\n\r\n", server.Path, server.Host)//the get req header.
 	_,err = connection.Write([]byte(request))
 	if err != nil {
         log.Println("Writing error:", err)
