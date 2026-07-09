@@ -56,12 +56,12 @@ func (server URL_PARSER) Connect() string{ //d'apres https://dzone.com/articles/
 	return response
 }
 
-func Get_verbose(server URL_PARSER)string{
+func (server URL_PARSER)Connect_Verbose()string{
 	response := server.Connect()
 	fmt.Printf(">Sending request GET /get HTTP/1.1\n>Host: %s\n>Accept: */*",server.Host)
 	lines := strings.Split(response, "\n")
 	for i, line := range lines {
-		lines[i] = "<" + line
+		lines[i] = "< " + line
 	}
 	result := strings.Join(lines, "\n")
 	return result
